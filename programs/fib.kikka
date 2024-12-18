@@ -1,0 +1,14 @@
+int a 1 
+int b 1 
+int n 1
+int iter 0
+inInt m 
+
+> iter m 
+owari 
+equal n b
+sum b a
+equal a n
+sum iter 1
+print b
+goto 6 

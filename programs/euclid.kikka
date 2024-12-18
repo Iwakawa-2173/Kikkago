@@ -1,0 +1,20 @@
+inInt x 
+inInt y
+int y1 0
+int buf 0
+int zero 0
+
+label cycle
+equal y1 y
+mod x y
+
+== x zero
+goto 18
+
+equal buf x
+equal x y
+equal y buf
+to cycle
+
+print y1
+owari 

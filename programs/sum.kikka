@@ -1,0 +1,10 @@
+hajimaru
+prec 100
+int a 5
+sum a 1
+double b 12.2030203020302030203
+sum b a
+print b
+string prog sum.kikka
+run prog
+owari

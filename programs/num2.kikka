@@ -1,0 +1,16 @@
+jikannohajimaru
+tint num 1
+tint a 0
+tint n 100
+tint iter 1
+> num n 
+owari 
+sum num 1
+equal iter 1
+sum iter 1
+== iter num
+print num
+equal a num
+mod a iter
+!= a 0
+goto 9 

@@ -1,0 +1,8 @@
+hitotsu 256
+label q1
+bunkiten -1 256
+goto 7
+mojiwokaku
+->
+to q1
+owari 
