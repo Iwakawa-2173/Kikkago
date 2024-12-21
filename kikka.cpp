@@ -1842,7 +1842,47 @@ int interpretline(string progline) {
 				if (isdouble(varname) && isdarr(varname2)) {
 					dvars[varname] = calcdisp(varname2);
 				} else return 5;
-			}
+			} else if (operation == "ceil") {
+				iss >> varname2;
+				if (isint(varname)) {
+					if (isfloat(varname2)) {
+						vars[varname] = ceil(fvars[varname2]);
+					} else if (isdouble(varname2)) {
+						vars[varname] = ceil(dvars[varname2]);
+					} else return 5;
+				} else return 5;
+			} else if (operation == "floor") {
+				iss >> varname2;
+				if (isint(varname)) {
+					if (isfloat(varname2)) {
+						vars[varname] = floor(fvars[varname2]);
+					} else if (isdouble(varname2)) {
+						vars[varname] = floor(dvars[varname2]);
+					} else return 5;
+				} else return 5;
+			} else if (operation == "round") {
+				iss >> varname2;
+				if (isint(varname)) {
+					if (isfloat(varname2)) {
+						if ((fvars[varname2] - floor(fvars[varname2])) < 0.5) {
+							vars[varname] = floor(fvars[varname2]);
+						} else {vars[varname] = ceil(fvars[varname2]);}
+					} else if (isdouble(varname2)) {
+						if ((dvars[varname2] - floor(dvars[varname2])) < 0.5) {
+							vars[varname] = floor(dvars[varname2]);
+						} else {vars[varname] = ceil(dvars[varname2]);}
+					} else return 5;
+				} else return 5;
+			} else if (operation == "trunc") {
+				iss >> varname2;
+				if (isint(varname)) {
+					if (isfloat(varname2)) {
+						vars[varname] = int(fvars[varname2]);
+					} else if (isdouble(varname2)) {
+						vars[varname] = int(dvars[varname2]);
+					} else return 5;
+				} else return 5;
+			} 
 			else return 1;
 		}
 	} else {
