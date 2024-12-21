@@ -1,11 +1,11 @@
 <NotepadPlus>
     <UserLang name="kikka" ext="kikka" udlVersion="2.1">
         <Settings>
-            <Global caseIgnored="no" allowFoldOfComments="no" foldCompact="no" forcePureLC="0" decimalSeparator="2" />
+            <Global caseIgnored="no" allowFoldOfComments="yes" foldCompact="no" forcePureLC="0" decimalSeparator="2" />
             <Prefix Keywords1="no" Keywords2="no" Keywords3="no" Keywords4="no" Keywords5="no" Keywords6="no" Keywords7="no" Keywords8="no" />
         </Settings>
         <KeywordLists>
-            <Keywords name="Comments">00 01 02 03 04</Keywords>
+            <Keywords name="Comments">00 01 02 03/* 04*/</Keywords>
             <Keywords name="Numbers, prefix1"></Keywords>
             <Keywords name="Numbers, prefix2"></Keywords>
             <Keywords name="Numbers, extras1"></Keywords>
@@ -24,7 +24,7 @@
             <Keywords name="Folders in comment, open"></Keywords>
             <Keywords name="Folders in comment, middle"></Keywords>
             <Keywords name="Folders in comment, close"></Keywords>
-            <Keywords name="Keywords1">f1&#x000D;&#x000A;f2&#x000D;&#x000A;f3&#x000D;&#x000A;hitotsu&#x000D;&#x000A;kaku&#x000D;&#x000A;ugoku&#x000D;&#x000A;henkamono&#x000D;&#x000A;bunkiten&#x000D;&#x000A;conf&#x000D;&#x000A;conf1&#x000D;&#x000A;conf2&#x000D;&#x000A;zero&#x000D;&#x000A;goto&#x000D;&#x000A;&gt;&#x000D;&#x000A;&lt;&#x000D;&#x000A;&gt;=&#x000D;&#x000A;&lt;=&#x000D;&#x000A;==&#x000D;&#x000A;!=&#x000D;&#x000A;label&#x000D;&#x000A;to&#x000D;&#x000A;break&#x000D;&#x000A;do&#x000D;&#x000A;block&#x000D;&#x000A;owari&#x000D;&#x000A;hajimaru&#x000D;&#x000A;;&#x000D;&#x000A;addrwokaku&#x000D;&#x000A;mojiwokaku&#x000D;&#x000A;addr&#x000D;&#x000A;kyouki&#x000D;&#x000A;inaddr&#x000D;&#x000A;loop&#x000D;&#x000A;int&#x000D;&#x000A;double&#x000D;&#x000A;float&#x000D;&#x000A;char&#x000D;&#x000A;bool&#x000D;&#x000A;string&#x000D;&#x000A;print&#x000D;&#x000A;sum&#x000D;&#x000A;mult&#x000D;&#x000A;sub&#x000D;&#x000A;div&#x000D;&#x000A;equal&#x000D;&#x000A;prec&#x000D;&#x000A;run&#x000D;&#x000A;inInt&#x000D;&#x000A;inDou&#x000D;&#x000A;inFlo&#x000D;&#x000A;inStr&#x000D;&#x000A;inBoo&#x000D;&#x000A;inCha&#x000D;&#x000A;-&gt;&#x000D;&#x000A;&lt;-&#x000D;&#x000A;array&#x000D;&#x000A;tint&#x000D;&#x000A;tfloat&#x000D;&#x000A;tdouble&#x000D;&#x000A;tchar&#x000D;&#x000A;tbool&#x000D;&#x000A;tstring&#x000D;&#x000A;mod&#x000D;&#x000A;factor&#x000D;&#x000A;sin&#x000D;&#x000A;cos&#x000D;&#x000A;exp&#x000D;&#x000A;ln&#x000D;&#x000A;set&#x000D;&#x000A;get&#x000D;&#x000A;uniform&#x000D;&#x000A;rand&#x000D;&#x000A;normal&#x000D;&#x000A;bernoulli&#x000D;&#x000A;poisson&#x000D;&#x000A;append&#x000D;&#x000A;pop&#x000D;&#x000A;write&#x000D;&#x000A;read&#x000D;&#x000A;jikannohajimaru&#x000D;&#x000A;jikannoowari&#x000D;&#x000A;ToInt&#x000D;&#x000A;ToFloat&#x000D;&#x000A;ToDouble&#x000D;&#x000A;lenght</Keywords>
+            <Keywords name="Keywords1">f1&#x000D;&#x000A;f2&#x000D;&#x000A;f3&#x000D;&#x000A;hitotsu&#x000D;&#x000A;kaku&#x000D;&#x000A;ugoku&#x000D;&#x000A;henkamono&#x000D;&#x000A;bunkiten&#x000D;&#x000A;conf&#x000D;&#x000A;conf1&#x000D;&#x000A;conf2&#x000D;&#x000A;zero&#x000D;&#x000A;goto&#x000D;&#x000A;&gt;&#x000D;&#x000A;&lt;&#x000D;&#x000A;&gt;=&#x000D;&#x000A;&lt;=&#x000D;&#x000A;==&#x000D;&#x000A;!=&#x000D;&#x000A;label&#x000D;&#x000A;to&#x000D;&#x000A;break&#x000D;&#x000A;do&#x000D;&#x000A;block&#x000D;&#x000A;owari&#x000D;&#x000A;hajimaru&#x000D;&#x000A;;&#x000D;&#x000A;addrwokaku&#x000D;&#x000A;mojiwokaku&#x000D;&#x000A;addr&#x000D;&#x000A;kyouki&#x000D;&#x000A;inaddr&#x000D;&#x000A;loop&#x000D;&#x000A;int&#x000D;&#x000A;double&#x000D;&#x000A;float&#x000D;&#x000A;char&#x000D;&#x000A;bool&#x000D;&#x000A;string&#x000D;&#x000A;print&#x000D;&#x000A;sum&#x000D;&#x000A;mult&#x000D;&#x000A;sub&#x000D;&#x000A;div&#x000D;&#x000A;equal&#x000D;&#x000A;prec&#x000D;&#x000A;run&#x000D;&#x000A;inInt&#x000D;&#x000A;inDou&#x000D;&#x000A;inFlo&#x000D;&#x000A;inStr&#x000D;&#x000A;inBoo&#x000D;&#x000A;inCha&#x000D;&#x000A;-&gt;&#x000D;&#x000A;&lt;-&#x000D;&#x000A;array&#x000D;&#x000A;tint&#x000D;&#x000A;tfloat&#x000D;&#x000A;tdouble&#x000D;&#x000A;tchar&#x000D;&#x000A;tbool&#x000D;&#x000A;tstring&#x000D;&#x000A;mod&#x000D;&#x000A;factor&#x000D;&#x000A;sin&#x000D;&#x000A;cos&#x000D;&#x000A;exp&#x000D;&#x000A;ln&#x000D;&#x000A;set&#x000D;&#x000A;get&#x000D;&#x000A;uniform&#x000D;&#x000A;rand&#x000D;&#x000A;normal&#x000D;&#x000A;bernoulli&#x000D;&#x000A;poisson&#x000D;&#x000A;append&#x000D;&#x000A;pop&#x000D;&#x000A;write&#x000D;&#x000A;read&#x000D;&#x000A;jikannohajimaru&#x000D;&#x000A;jikannoowari&#x000D;&#x000A;ToInt&#x000D;&#x000A;ToFloat&#x000D;&#x000A;ToDouble&#x000D;&#x000A;lenght&#x000D;&#x000A;mean&#x000D;&#x000A;cumsum&#x000D;&#x000A;dispersion</Keywords>
             <Keywords name="Keywords2"></Keywords>
             <Keywords name="Keywords3"></Keywords>
             <Keywords name="Keywords4"></Keywords>
@@ -36,7 +36,7 @@
         </KeywordLists>
         <Styles>
             <WordsStyle name="DEFAULT" fgColor="FFFFFF" bgColor="FFFFFF" colorStyle="1" fontStyle="0" nesting="0" />
-            <WordsStyle name="COMMENTS" fgColor="000000" bgColor="FFFFFF" fontStyle="0" nesting="0" />
+            <WordsStyle name="COMMENTS" fgColor="008000" bgColor="FFFFFF" colorStyle="1" fontStyle="0" nesting="0" />
             <WordsStyle name="LINE COMMENTS" fgColor="808080" bgColor="FFFFFF" colorStyle="1" fontStyle="0" nesting="0" />
             <WordsStyle name="NUMBERS" fgColor="80FFFF" bgColor="FFFFFF" colorStyle="1" fontStyle="0" nesting="0" />
             <WordsStyle name="KEYWORDS1" fgColor="00FFFF" bgColor="FFFFFF" colorStyle="1" fontStyle="0" nesting="0" />

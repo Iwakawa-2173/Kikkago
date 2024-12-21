@@ -110,6 +110,49 @@ double lnn(double n) {
 	return result;
 }
 
+// Среднее арифемтическое
+double calculateAverage(const std::string& vectorname) {
+    if (darrs[vectorname].empty()) {
+        throw std::invalid_argument("Vector is empty. Cannot calculate average.");
+    }
+
+    double sum = 0.0;
+    for (const double& num : darrs[vectorname]) {
+        sum += num;
+    }
+
+    return sum / darrs[vectorname].size();
+}
+
+// Кумулятивная сумма
+double cumsum(const std::string& vectorname) {
+    if (darrs[vectorname].empty()) {
+        throw std::invalid_argument("Vector is empty. Cannot calculate average.");
+    }
+
+    double sum = 0.0;
+    for (const double& num : darrs[vectorname]) {
+        sum += num;
+    }
+
+    return sum;
+}
+
+// Дисперсия
+double calcdisp(const std::string& vectorname) {
+    if (darrs[vectorname].empty()) {
+        throw std::invalid_argument("Vector is empty. Cannot calculate average.");
+    }
+	double mean = calculateAverage(vectorname);
+	double n = darrs[vectorname].size();
+    double sum = 0.0;
+    for (const double& num : darrs[vectorname]) {
+        sum += (num - mean)*(num - mean);
+    }
+
+    return (1/(n-1))*sum;
+}
+
 // Функция для проверки наличия ключа в заданном массиве
 bool keyExists(const std::string& mapName, const std::string& key) {
     if (mapName == "vars") {
@@ -349,12 +392,12 @@ double RandomUniform(double min, double max) {
 }
 
 // Распределение Бернулли
-int RandomBernoulli(double p) {
+double RandomBernoulli(double p) {
     return RandomUniform(0.0, 1.0) < p ? 1 : 0; // Возвращаем 1 с вероятностью p, иначе 0
 }
 
 // Распределение Пуассона
-int RandomPoisson(double lambda) {
+double RandomPoisson(double lambda) {
     double L = expn(-lambda);
     int k = 0;
     double p = 1.0;
@@ -1782,11 +1825,29 @@ int interpretline(string progline) {
 						vars[varname] = sarrs[varname2].size();
 					} else return 5;
 				} else return 5;
+			} else if (operation == "/*") {watchblock = true;}
+			else if (operation == "*/") {;}
+			else if (operation == "mean") {
+				iss >> varname2;
+				if (isdouble(varname) && isdarr(varname2)) {
+					dvars[varname] = calculateAverage(varname2);
+				} else return 5;
+			} else if (operation == "cumsum") {
+				iss >> varname2;
+				if (isdouble(varname) && isdarr(varname2)) {
+					dvars[varname] = cumsum(varname2);
+				} else return 5;
+			} else if (operation == "dispersion") {
+				iss >> varname2;
+				if (isdouble(varname) && isdarr(varname2)) {
+					dvars[varname] = calcdisp(varname2);
+				} else return 5;
 			}
 			else return 1;
 		}
 	} else {
 		if (operation == "break") {watchblock = false;}
+		else if (operation == "*/") {watchblock = false;}
 	}
 
 	return 0;
@@ -1798,8 +1859,8 @@ int main(int argc, char* argv[]) {
 	// Проверяем, был ли передан файл
     if (argc < 2) {
         std::cerr << "Usage: " << argv[0] << " <filename>" << std::endl;
-		std::cerr << "Kikkago - Programming language of reborning japanese girls" << std::endl;
-		std::cerr << "Version 1.0.1 (Orwell)" << std::endl;
+		std::cerr << "Kikkago - Interpreted assembler? For what?" << std::endl;
+		std::cerr << "Version 1.0.2" << std::endl;
         return 1;
     }
 
