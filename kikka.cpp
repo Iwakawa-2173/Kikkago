@@ -54,6 +54,89 @@ clock_t start;
 
 int lineNumber = 0;  // Номер текущей обрабатываемой строки программы
 
+// Функция для проверки наличия ключа в заданном массиве
+bool keyExists(const std::string& mapName, const std::string& key) {
+    if (mapName == "vars") {
+        return vars.find(key) != vars.end();
+    } else if (mapName == "dvars") {
+        return dvars.find(key) != dvars.end();
+    } else if (mapName == "cvars") {
+        return cvars.find(key) != cvars.end();
+    } else if (mapName == "fvars") {
+        return fvars.find(key) != fvars.end();
+    } else if (mapName == "bools") {
+        return bools.find(key) != bools.end();
+    } else if (mapName == "strings") {
+        return strings.find(key) != strings.end();
+    } else if (mapName == "iarrs") {
+        return iarrs.find(key) != iarrs.end();
+    } else if (mapName == "farrs") {
+        return farrs.find(key) != farrs.end();
+    } else if (mapName == "darrs") {
+        return darrs.find(key) != darrs.end();
+    } else if (mapName == "carrs") {
+        return carrs.find(key) != carrs.end();
+    } else if (mapName == "barrs") {
+        return barrs.find(key) != barrs.end();
+    } else if (mapName == "sarrs") {
+        return sarrs.find(key) != sarrs.end();
+    } else if (mapName == "labels") {
+        return labels.find(key) != labels.end();
+    } else if (mapName == "blocks") {
+        return blocks.find(key) != blocks.end();
+    } else {
+        std::cerr << "Unknown array name: " << mapName << std::endl;
+        return false;
+    }
+}
+
+bool isint(const std::string& key) {return keyExists("vars", key);}
+bool isfloat(const std::string& key) {return keyExists("fvars", key);}
+bool isdouble(const std::string& key) {return keyExists("dvars", key);}
+bool isbool(const std::string& key) {return keyExists("bools", key);}
+bool ischar(const std::string& key) {return keyExists("cvars", key);}
+bool isstring(const std::string& key) {return keyExists("strings", key);}
+
+bool isiarr(const std::string& key) {return keyExists("iarrs", key);}
+bool isfarr(const std::string& key) {return keyExists("farrs", key);}
+bool isdarr(const std::string& key) {return keyExists("darrs", key);}
+bool isbarr(const std::string& key) {return keyExists("barrs", key);}
+bool iscarr(const std::string& key) {return keyExists("carrs", key);}
+bool issarr(const std::string& key) {return keyExists("sarrs", key);}
+bool islabel(const std::string& key) {return keyExists("labels", key);}
+bool isblock(const std::string& key) {return keyExists("blocks", key);}
+
+// Не объявлена ли переменная и/или массив
+bool isnotdeclared(const std::string& key) {
+	if ((!isint(key)) && 
+	(!isfloat(key)) && 
+	(!isdouble(key)) && 
+	(!isbool(key)) && 
+	(!ischar(key)) && 
+	(!isstring(key)) && 
+	(!isiarr(key)) && 
+	(!isfarr(key)) && 
+	(!isdarr(key)) && 
+	(!isbarr(key)) && 
+	(!iscarr(key)) && 
+	(!issarr(key)) &&
+	(!islabel(key)) &&
+	(!isblock(key))) {
+		return true;
+	} else {return false;}
+}
+
+bool isarray(const std::string& key) {
+	if ((!isiarr(key)) || 
+	(!isfarr(key)) || 
+	(!isdarr(key)) || 
+	(!isbarr(key)) || 
+	(!iscarr(key)) || 
+	(!issarr(key))) {
+		return true;
+	} else {return false;}
+}
+
 // Функции логического отрицания и тавтологии
 int _negation(int input) {return !input;}
 
@@ -153,79 +236,42 @@ double calcdisp(const std::string& vectorname) {
     return (1/(n-1))*sum;
 }
 
-// Функция для проверки наличия ключа в заданном массиве
-bool keyExists(const std::string& mapName, const std::string& key) {
-    if (mapName == "vars") {
-        return vars.find(key) != vars.end();
-    } else if (mapName == "dvars") {
-        return dvars.find(key) != dvars.end();
-    } else if (mapName == "cvars") {
-        return cvars.find(key) != cvars.end();
-    } else if (mapName == "fvars") {
-        return fvars.find(key) != fvars.end();
-    } else if (mapName == "bools") {
-        return bools.find(key) != bools.end();
-    } else if (mapName == "strings") {
-        return strings.find(key) != strings.end();
-    } else if (mapName == "iarrs") {
-        return iarrs.find(key) != iarrs.end();
-    } else if (mapName == "farrs") {
-        return farrs.find(key) != farrs.end();
-    } else if (mapName == "darrs") {
-        return darrs.find(key) != darrs.end();
-    } else if (mapName == "carrs") {
-        return carrs.find(key) != carrs.end();
-    } else if (mapName == "barrs") {
-        return barrs.find(key) != barrs.end();
-    } else if (mapName == "sarrs") {
-        return sarrs.find(key) != sarrs.end();
-    } else {
-        std::cerr << "Unknown array name: " << mapName << std::endl;
-        return false;
+std::vector<int> createHistogram(const std::string& vectorname, int numBins) {
+	
+	std::vector<double> data;
+	
+	if (isdarr(vectorname)) {
+		data = darrs[vectorname];
+	} else {
+		throw std::invalid_argument("Variable is not double vector.");
+	}
+	
+    if (data.empty() || numBins <= 0) {
+        return {};
     }
-}
 
-bool isint(const std::string& key) {return keyExists("vars", key);}
-bool isfloat(const std::string& key) {return keyExists("fvars", key);}
-bool isdouble(const std::string& key) {return keyExists("dvars", key);}
-bool isbool(const std::string& key) {return keyExists("bools", key);}
-bool ischar(const std::string& key) {return keyExists("cvars", key);}
-bool isstring(const std::string& key) {return keyExists("strings", key);}
+    // Находим минимальное и максимальное значение в выборке
+    double minValue = *std::min_element(data.begin(), data.end());
+    double maxValue = *std::max_element(data.begin(), data.end());
 
-bool isiarr(const std::string& key) {return keyExists("iarrs", key);}
-bool isfarr(const std::string& key) {return keyExists("farrs", key);}
-bool isdarr(const std::string& key) {return keyExists("darrs", key);}
-bool isbarr(const std::string& key) {return keyExists("barrs", key);}
-bool iscarr(const std::string& key) {return keyExists("carrs", key);}
-bool issarr(const std::string& key) {return keyExists("sarrs", key);}
+    // Создаем вектор для гистограммы с нулями
+    std::vector<int> histogram(numBins, 0);
 
-// Не объявлена ли переменная и/или массив
-bool isnotdeclared(const std::string& key) {
-	if ((!isint(key)) && 
-	(!isfloat(key)) && 
-	(!isdouble(key)) && 
-	(!isbool(key)) && 
-	(!ischar(key)) && 
-	(!isstring(key)) && 
-	(!isiarr(key)) && 
-	(!isfarr(key)) && 
-	(!isdarr(key)) && 
-	(!isbarr(key)) && 
-	(!iscarr(key)) && 
-	(!issarr(key))) {
-		return true;
-	} else {return false;}
-}
+    // Вычисляем ширину каждого бина
+    double binWidth = (maxValue - minValue) / numBins;
 
-bool isarray(const std::string& key) {
-	if ((!isiarr(key)) || 
-	(!isfarr(key)) || 
-	(!isdarr(key)) || 
-	(!isbarr(key)) || 
-	(!iscarr(key)) || 
-	(!issarr(key))) {
-		return true;
-	} else {return false;}
+    // Заполняем гистограмму
+    for (double value : data) {
+        if (value == maxValue) {
+            // Если значение равно максимальному, помещаем его в последний бин
+            histogram[numBins - 1]++;
+        } else {
+            int binIndex = static_cast<int>((value - minValue) / binWidth);
+            histogram[binIndex]++;
+        }
+    }
+	
+    return histogram;
 }
 
 int tautology(int input) {return input;}
@@ -419,6 +465,90 @@ double RandomNormal(double mean, double stddev) {
     return z0 * stddev + mean; // Масштабируем к нормальному распределению
 }
 
+// Сложение вектора int с числом
+void sumiarr(std::vector<int>& vec, int multiplier) {
+    for (auto& element : vec) {
+        element += multiplier;
+    }
+}
+
+// Сложение вектора float с числом
+void sumfarr(std::vector<float>& vec, float multiplier) {
+    for (auto& element : vec) {
+        element += multiplier;
+    }
+}
+
+// Сложение вектора double с числом
+void sumdarr(std::vector<double>& vec, double multiplier) {
+    for (auto& element : vec) {
+        element += multiplier;
+    }
+}
+
+// Вычитание из вектора int числа
+void subiarr(std::vector<int>& vec, int multiplier) {
+    for (auto& element : vec) {
+        element -= multiplier;
+    }
+}
+
+// Вычитание из вектора float числа
+void subfarr(std::vector<float>& vec, float multiplier) {
+    for (auto& element : vec) {
+        element -= multiplier;
+    }
+}
+
+// Вычитание из вектора double числа
+void subdarr(std::vector<double>& vec, double multiplier) {
+    for (auto& element : vec) {
+        element -= multiplier;
+    }
+}
+
+// Домножение вектора int на число
+void multiarr(std::vector<int>& vec, int multiplier) {
+    for (auto& element : vec) {
+        element *= multiplier;
+    }
+}
+
+// Домножение вектора float на число
+void multfarr(std::vector<float>& vec, float multiplier) {
+    for (auto& element : vec) {
+        element *= multiplier;
+    }
+}
+
+// Домножение вектора double на число
+void multdarr(std::vector<double>& vec, double multiplier) {
+    for (auto& element : vec) {
+        element *= multiplier;
+    }
+}
+
+// Деление вектора int на число
+void diviarr(std::vector<int>& vec, int multiplier) {
+    for (auto& element : vec) {
+        element /= multiplier;
+    }
+}
+
+// Деление вектора float на число
+void divfarr(std::vector<float>& vec, float multiplier) {
+    for (auto& element : vec) {
+        element /= multiplier;
+    }
+}
+
+// Деление вектора double на число
+void divdarr(std::vector<double>& vec, double multiplier) {
+    for (auto& element : vec) {
+        element /= multiplier;
+    }
+}
+
 int interpretline(string progline) {
 	
 	std::istringstream iss(progline);
@@ -434,11 +564,8 @@ int interpretline(string progline) {
 	
 	// Извлекаем операцию, переменную и значение и выполняем операцию в зависимости от команды, всё в зависимости от типа переменной
 	if (watchblock == false) {
-		if ((operation == "label") || (operation == "to")) {
-			iss >> label;
-			if (operation == "label") {labels[label] = lineNumber;}
-			else if (operation == "to") {lineNumber = labels[label];}
-		} else if ((operation == "do") || (operation == "break") || (operation == "block")) {
+		if ((operation == "label")) {;}
+		else if ((operation == "do") || (operation == "break") || (operation == "block")) {
 			iss >> block;
 			if (operation == "do") {
 				inblocks[block] = true;
@@ -450,7 +577,6 @@ int interpretline(string progline) {
 					inblocks[block] = false;
 				}
 			} else if (operation == "block") {
-				blocks[block] = lineNumber;
 				watchblock = true;
 			}
 		} else if ((operation == "ugoku") || 
@@ -472,8 +598,7 @@ int interpretline(string progline) {
 		(operation == "<-") || 
 		(operation == "->") || 
 		(operation == "") || 
-		(operation == ";") || 
-		(operation == "goto") || 
+		(operation == ";") ||  
 		(operation == "owari") || 
 		(operation == "prob") || 
 		(operation == "hajimaru") || 
@@ -600,10 +725,7 @@ int interpretline(string progline) {
 			} else if (operation == "addrwokaku") {std::cerr << addr << std::endl;}
 			else if (operation == "mojiwokaku") {std::cerr << char(addr);}
 			else if (operation == "hajimaru") {;}
-			else if (operation == "goto") {
-				if (a1 == -1) {lineNumber = addr - 1;}
-				else {lineNumber = a1 - 1;}
-			} else if (operation == "->") {
+			else if (operation == "->") {
 				if (addr == 256) {addr = 0;}
 				else {addr++;}
 			} else if (operation == "<-") {
@@ -633,37 +755,37 @@ int interpretline(string progline) {
 			else {return 1;}
 		} else {
 			iss >> varname;
-		if (operation == "int") {
-			iss >> value;
-			if (isnotdeclared(varname)) {
-				vars[varname] = value;
-			} else return 3;
-		} else if (operation == "float") {
-			iss >> fvalue;
-			if (isnotdeclared(varname)) {
-				fvars[varname] = fvalue;
-			} else return 3;
-		} else if (operation == "double") {
-			iss >> dvalue;
-			if (isnotdeclared(varname)) {
-				dvars[varname] = dvalue;
-			} else return 3;
-		} else if (operation == "char") {
-			iss >> cvalue;
-			if (isnotdeclared(varname)) {
-				cvars[varname] = cvalue;
-			} else return 3;
-		} else if (operation == "bool") {
-			iss >> value;
-			if (isnotdeclared(varname)) {
-				bools[varname] = (value == 0) ? 0 : 1;
-			} else return 3;
-		} else if (operation == "string") {
-			iss >> stv;
-			if (isnotdeclared(varname)) {
-				strings[varname] = stv;
-			} else return 3;
-		} else if (operation == "array") {
+			if (operation == "int") {
+				iss >> value;
+				if (isnotdeclared(varname)) {
+					vars[varname] = value;
+				} else return 3;
+			} else if (operation == "float") {
+				iss >> fvalue;
+				if (isnotdeclared(varname)) {
+					fvars[varname] = fvalue;
+				} else return 3;
+			} else if (operation == "double") {
+				iss >> dvalue;
+				if (isnotdeclared(varname)) {
+					dvars[varname] = dvalue;
+				} else return 3;
+			} else if (operation == "char") {
+				iss >> cvalue;
+				if (isnotdeclared(varname)) {
+					cvars[varname] = cvalue;
+				} else return 3;
+			} else if (operation == "bool") {
+				iss >> value;
+				if (isnotdeclared(varname)) {
+					bools[varname] = (value == 0) ? 0 : 1;
+				} else return 3;
+			} else if (operation == "string") {
+				iss >> stv;
+				if (isnotdeclared(varname)) {
+					strings[varname] = stv;
+				} else return 3;
+			} else if (operation == "array") {
 				iss >> type >> varname2;
 				if (isnotdeclared(varname)) {
 					if (type == "int") {
@@ -783,7 +905,32 @@ int interpretline(string progline) {
 					} else if (isdouble(varname2)) {
 						dvars[varname] += dvars[varname2];
 					} else {dvars[varname] += std::stod(varname2);}
-				} else {return 5;}
+				} else if (isiarr(varname)) {
+					if (isint(varname2)){
+						sumiarr(iarrs[varname], vars[varname2]);
+					} else if (isfloat(varname2)) {
+						sumiarr(iarrs[varname], int(fvars[varname2]));
+					} else if (isdouble(varname2)) {
+						sumiarr(iarrs[varname], int(dvars[varname2]));
+					} else {sumiarr(iarrs[varname], std::stoi(varname2));}
+				} else if (isfarr(varname)) {
+					if (isint(varname2)){
+						sumfarr(farrs[varname], float(vars[varname2]));
+					} else if (isfloat(varname2)) {
+						sumfarr(farrs[varname], fvars[varname2]);
+					} else if (isdouble(varname2)) {
+						sumfarr(farrs[varname], float(dvars[varname2]));
+					} else {sumfarr(farrs[varname], std::stof(varname2));}
+				} else if (isdarr(varname)) {
+					if (isint(varname2)){
+						sumdarr(darrs[varname], double(vars[varname2]));
+					} else if (isfloat(varname2)) {
+						sumdarr(darrs[varname], double(fvars[varname2]));
+					} else if (isdouble(varname2)) {
+						sumdarr(darrs[varname], dvars[varname2]);
+					} else {sumdarr(darrs[varname], std::stod(varname2));}
+				} 
+				else return 5;
 			} else if (operation == "mult") {
 				iss >> varname2;
 				if (isint(varname)) {
@@ -810,7 +957,32 @@ int interpretline(string progline) {
 					} else if (isdouble(varname2)) {
 						dvars[varname] *= dvars[varname2];
 					} else {dvars[varname] *= std::stod(varname2);}
-				} else return 5;
+				} else if (isiarr(varname)) {
+					if (isint(varname2)){
+						multiarr(iarrs[varname], vars[varname2]);
+					} else if (isfloat(varname2)) {
+						multiarr(iarrs[varname], int(fvars[varname2]));
+					} else if (isdouble(varname2)) {
+						multiarr(iarrs[varname], int(dvars[varname2]));
+					} else {multiarr(iarrs[varname], std::stoi(varname2));}
+				} else if (isfarr(varname)) {
+					if (isint(varname2)){
+						multfarr(farrs[varname], float(vars[varname2]));
+					} else if (isfloat(varname2)) {
+						multfarr(farrs[varname], fvars[varname2]);
+					} else if (isdouble(varname2)) {
+						multfarr(farrs[varname], float(dvars[varname2]));
+					} else {multfarr(farrs[varname], std::stof(varname2));}
+				} else if (isdarr(varname)) {
+					if (isint(varname2)){
+						multdarr(darrs[varname], double(vars[varname2]));
+					} else if (isfloat(varname2)) {
+						multdarr(darrs[varname], double(fvars[varname2]));
+					} else if (isdouble(varname2)) {
+						multdarr(darrs[varname], dvars[varname2]);
+					} else {multdarr(darrs[varname], std::stod(varname2));}
+				} 
+				else return 5;
 			} else if (operation == "sub") {
 				iss >> varname2;
 				if (isint(varname)) {
@@ -837,7 +1009,32 @@ int interpretline(string progline) {
 					} else if (isdouble(varname2)) {
 						dvars[varname] -= dvars[varname2];
 					} else {dvars[varname] -= std::stod(varname2);}
-				} else return 5;
+				} else if (isiarr(varname)) {
+					if (isint(varname2)){
+						subiarr(iarrs[varname], vars[varname2]);
+					} else if (isfloat(varname2)) {
+						subiarr(iarrs[varname], int(fvars[varname2]));
+					} else if (isdouble(varname2)) {
+						subiarr(iarrs[varname], int(dvars[varname2]));
+					} else {subiarr(iarrs[varname], std::stoi(varname2));}
+				} else if (isfarr(varname)) {
+					if (isint(varname2)){
+						subfarr(farrs[varname], float(vars[varname2]));
+					} else if (isfloat(varname2)) {
+						subfarr(farrs[varname], fvars[varname2]);
+					} else if (isdouble(varname2)) {
+						subfarr(farrs[varname], float(dvars[varname2]));
+					} else {subfarr(farrs[varname], std::stof(varname2));}
+				} else if (isdarr(varname)) {
+					if (isint(varname2)){
+						subdarr(darrs[varname], double(vars[varname2]));
+					} else if (isfloat(varname2)) {
+						subdarr(darrs[varname], double(fvars[varname2]));
+					} else if (isdouble(varname2)) {
+						subdarr(darrs[varname], dvars[varname2]);
+					} else {subdarr(darrs[varname], std::stod(varname2));}
+				} 
+				else return 5;
 			} else if (operation == "div") {
 				iss >> varname2;
 				if (isint(varname)) {
@@ -882,7 +1079,32 @@ int interpretline(string progline) {
 						if (std::stoi(varname2) == 0) {return 4;}
 						dvars[varname] /= std::stod(varname2);
 					}
-				} else return 5;
+				} else if (isiarr(varname)) {
+					if (isint(varname2)){
+						diviarr(iarrs[varname], vars[varname2]);
+					} else if (isfloat(varname2)) {
+						diviarr(iarrs[varname], int(fvars[varname2]));
+					} else if (isdouble(varname2)) {
+						diviarr(iarrs[varname], int(dvars[varname2]));
+					} else {subiarr(iarrs[varname], std::stoi(varname2));}
+				} else if (isfarr(varname)) {
+					if (isint(varname2)){
+						divfarr(farrs[varname], float(vars[varname2]));
+					} else if (isfloat(varname2)) {
+						divfarr(farrs[varname], fvars[varname2]);
+					} else if (isdouble(varname2)) {
+						divfarr(farrs[varname], float(dvars[varname2]));
+					} else {divfarr(farrs[varname], std::stof(varname2));}
+				} else if (isdarr(varname)) {
+					if (isint(varname2)){
+						divdarr(darrs[varname], double(vars[varname2]));
+					} else if (isfloat(varname2)) {
+						divdarr(darrs[varname], double(fvars[varname2]));
+					} else if (isdouble(varname2)) {
+						divdarr(darrs[varname], dvars[varname2]);
+					} else {divdarr(darrs[varname], std::stod(varname2));}
+				} 
+				else return 5;
 			} else if (operation == "pow") {
 				iss >> varname2;
 				if (isint(varname)) {
@@ -1882,6 +2104,26 @@ int interpretline(string progline) {
 						vars[varname] = int(dvars[varname2]);
 					} else return 5;
 				} else return 5;
+			} else if (operation == "histogram") {
+				iss >> varname2 >> varname3;
+				if (isiarr(varname)) {
+					if (isdarr(varname2) && isint(varname3)) {
+						iarrs[varname] = createHistogram(varname2, vars[varname3]);
+					} else if (isdarr(varname2) && !isint(varname3)) {
+						iarrs[varname] = createHistogram(varname2, std::stoi(varname3));
+					}
+				} else return 5;
+			} else if (operation == "goto") {
+				if (isnotdeclared(varname)) {
+					int gtl = std::stoi(varname);
+					if (gtl == -1) {lineNumber = addr - 1;}
+					else {lineNumber = gtl - 1;}
+				} else if (isint(varname)) {
+					if (vars[varname] == -1) {lineNumber = addr - 1;}
+					else {lineNumber = vars[varname] - 1;}
+				} else if (islabel(varname)) {
+					lineNumber = labels[varname];
+				} else return 5;
 			} 
 			else return 1;
 		}
@@ -1925,7 +2167,7 @@ int main(int argc, char* argv[]) {
     
 	while (std::getline(file, line)) {
 		std::istringstream lstr(line);
-		std::string declare, block, varname;
+		std::string declare, block, label, varname;
 		std::string stv;
 		int value = 0;
 		char cvalue = 0;
@@ -1936,6 +2178,10 @@ int main(int argc, char* argv[]) {
 		if (declare == "jikannohajimaru") {
 			start = clock();
 			jikanwomiru = true;
+		} else if (declare == "label") {
+			lstr >> label;
+			if (isnotdeclared(label)) {labels[label] = lineNum;}
+			else return 3;
 		} else if (declare == "block"){
 			lstr >> block;
 			blocks[block] = lineNum;
@@ -2062,7 +2308,7 @@ int main(int argc, char* argv[]) {
 			if (code == 1) {
 				std::cerr << "Unknown operation in line!" << std::endl;
 			} else if (code == 3) {
-				std::cerr << "Declaration of existing variable or array in line!" << std::endl;
+				std::cerr << "Declaration of existing variable (var, label or block) or array in line!" << std::endl;
 			} else if (code == 4) {
 				std::cerr << "Division by zero in line!" << std::endl;
 			} else if (code == 5) {
