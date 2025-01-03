@@ -1,0 +1,17 @@
+jikannohajimaru
+rand 0
+double a 0
+int iter 0
+array arr1 double 0.0
+label b1
+== iter 20
+do owari 
+normal a 5 10
+append arr1 a
+sum iter 1
+goto b1
+
+block owari
+print arr1
+owari
+break owari 

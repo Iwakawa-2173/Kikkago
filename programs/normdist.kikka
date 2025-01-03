@@ -1,0 +1,26 @@
+rand 0
+double disp 0
+double expectation 0
+double limit 0
+double q 0
+array sample double 0
+array hist int 0
+
+label cycle
+> limit 20
+do ow
+normal q 12 1
+append sample q
+sum limit 1
+goto cycle
+
+block ow
+; print sample
+mean expectation sample
+print expectation
+dispersion disp sample
+print disp
+histogram hist sample 10
+print hist
+owari 
+break ow

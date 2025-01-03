@@ -1,0 +1,24 @@
+jikannohajimaru
+rand 0
+tint a 0
+tint hitotsu 0
+tstring strG Gistogramma
+tstring str0 Zeros:
+tstring str1 Ones:
+inInt sample
+== cycles sample
+do q1
+bernoulli a 0.5
+
+== a 1
+sum hitotsu 1
+
+block q1
+sub cycles hitotsu
+array arr1 int 0
+append arr1 cycles
+append arr1 hitotsu
+print strG
+print arr1
+owari 
+break q1
