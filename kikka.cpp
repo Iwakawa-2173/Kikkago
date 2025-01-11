@@ -54,6 +54,26 @@ clock_t start;
 
 int lineNumber = 0;  // Номер текущей обрабатываемой строки программы
 
+// Функция для преобразования ленты в число
+int binaryArrayToInt(std::size_t start, std::size_t end) {
+    // Проверка на корректность диапазона
+    if (start >= end || end > tape.size()) {
+        throw std::out_of_range("Invalid range");
+    }
+
+    int result = 0;
+    
+    // Преобразование двоичной записи в целое число
+    for (std::size_t i = start; i < end; ++i) {
+        // Сдвигаем результат влево на 1 (умножаем на 2)
+        result <<= 1;
+        // Добавляем текущий бит (0 или 1)
+        result |= tape[i];
+    }
+
+    return result;
+}
+
 // Функция для проверки наличия ключа в заданном массиве
 bool keyExists(const std::string& mapName, const std::string& key) {
     if (mapName == "vars") {
@@ -2124,7 +2144,24 @@ int interpretline(string progline) {
 				} else if (islabel(varname)) {
 					lineNumber = labels[varname];
 				} else return 5;
-			} 
+			} else if (operation == "tapeint") {
+				iss >> varname2 >> varname3;
+				if (isint(varname)) {
+					if (isint(varname2)) {
+						if (isint(varname3)) {
+							vars[varname] = binaryArrayToInt(vars[varname2], vars[varname3]);
+						} else {
+							vars[varname] = binaryArrayToInt(vars[varname2], std::stoi(varname3));
+						}
+					} else {
+						if (isint(varname3)) {
+							vars[varname] = binaryArrayToInt(std::stoi(varname2), vars[varname3]);
+						} else {
+							vars[varname] = binaryArrayToInt(std::stoi(varname2), std::stoi(varname3));
+						}
+					}
+				} else return 5;
+			}
 			else return 1;
 		}
 	} else {
