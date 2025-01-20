@@ -41,7 +41,7 @@ std::map<std::string, float> fvars; // Хранилище переменных �
 std::map<std::string, int> alephs; // Хранилище переменных типа aleph
 std::map<std::string, bool> bools; // Хранилище переменных типа bool
 std::map<std::string, std::string> strings; // Хранилище переменных типа strings
-// Массивые целых, не целых и строк
+// Массивы целых, не целых и строк
 std::map<std::string, std::vector<int>> iarrs; // Хранилище массивов целых чисел
 std::map<std::string, std::vector<float>> farrs; // Хранилище массивов float чисел
 std::map<std::string, std::vector<double>> darrs; // Хранилище массивов double чисел
@@ -52,7 +52,13 @@ bool watchblock = false;
 bool jikanwomiru = false;
 clock_t start;
 
-int lineNumber = 0;  // Номер текущей обрабатываемой строки программы
+// Выводить ли технические сообщения об успехе программы?
+bool var_messages = true;
+
+int& lineNumber = vars["lineNumber"];  // Номер текущей обрабатываемой строки программы
+
+// Массив с программой (построчно)
+std::vector<std::string>& program = sarrs["program"];
 
 // Функция для преобразования ленты в число
 int binaryArrayToInt(std::size_t start, std::size_t end) {
@@ -2161,7 +2167,7 @@ int interpretline(string progline) {
 						}
 					}
 				} else return 5;
-			}
+			} else if (operation == "nsm") {;}
 			else return 1;
 		}
 	} else {
@@ -2175,11 +2181,14 @@ int interpretline(string progline) {
 // Основная функця процессора, интерпретирующая ассемблер
 int main(int argc, char* argv[]) {
 
+	// Инициализация номера линии
+	lineNumber = 0;
+
 	// Проверяем, был ли передан файл
     if (argc < 2) {
         std::cerr << "Usage: " << argv[0] << " <filename>" << std::endl;
-		std::cerr << "Kikkago - Interpreted assembler? For what?" << std::endl;
-		std::cerr << "Version 1.0.2" << std::endl;
+		std::cerr << "Kikkago - Quine is so easy in this language!" << std::endl;
+		std::cerr << "Version 1.0.3" << std::endl;
         return 1;
     }
 
@@ -2192,7 +2201,7 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    std::vector<std::string> program;
+    // std::vector<std::string> program;
     std::string line;
 	int lineNum = 0; // Для номера строки
 	int hajimaru = 0;
@@ -2313,7 +2322,9 @@ int main(int argc, char* argv[]) {
 					std::cin >> strings[varname];
 				} 
 			} else {return 3;}
-		} 
+		} else if (declare == "nsm") {
+			var_messages = false;
+		}
         program.push_back(line);
 		lineNum++;
     }
@@ -2333,12 +2344,14 @@ int main(int argc, char* argv[]) {
 		if (code == 0) {
 			;
 		} else if (code == 2) {
-			std::cerr << "The program " << filename << " has completed successfully!" << std::endl;
-			if (jikanwomiru == true) {
-				jikanwomiru = false;
-				clock_t end = clock();
-				double seconds = (double)(end - start) / CLOCKS_PER_SEC;
-				std::cerr << "Seconds: " << seconds << std::endl;
+			if (var_messages == true) {
+				std::cerr << "The program " << filename << " has completed successfully!" << std::endl;
+				if (jikanwomiru == true) {
+					jikanwomiru = false;
+					clock_t end = clock();
+					double seconds = (double)(end - start) / CLOCKS_PER_SEC;
+					std::cerr << "Seconds: " << seconds << std::endl;
+				}
 			}
 			return 0;
 		} else {

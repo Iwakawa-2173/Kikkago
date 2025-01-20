@@ -1,0 +1,6 @@
+nsm
+tstring a
+> cycles 6
+owari
+get program cycles a
+print a  
