@@ -3,7 +3,22 @@
 #include <string>
 #include <sstream>
 #include <map>
+
+// system-dependent headers
+#if defined WIN32 || defined _WIN32 || defined __WIN32__ || defined __NT__
+#ifndef PLATFORM_WINDOWS
+#define PLATFORM_WINDOWS 1
+#endif
 #include "windows.h"
+#endif
+#ifdef __APPLE__
+#error "Sorry but Apple platform not supported now..."
+#elif defined __linux__ || defined __unix__
+#ifndef PLATFORM_UNIX
+#define PALTFORM_UNIX 1
+#endif
+#endif
+
 #include <cmath>
 #include <iomanip>
 #include <iostream>
