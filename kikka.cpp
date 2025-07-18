@@ -199,12 +199,13 @@ int cnk(unsigned int n, unsigned int k) {
 	if(n < k){
 		return 0;
 	}
-	res = 1;
+	int res = 1;
 	for(; k < n; k++){ // свойство факториала
 		res *= k;
 	}
 	return res/factor(k); // O(n, k) = O(n-k)+O(k)
 	//return factor(n) / (factor(n - k) * factor(k));} // O(n,k)=O(n)+O(n-k)+O(k)
+}
 
 // Синус
 double sinn(double n) {
@@ -256,7 +257,7 @@ double calculateAverage(const std::string& vectorname) {
         throw std::invalid_argument("Vector is empty. Cannot calculate average.");
     }
 
-    double sum = std::accumalate(darrs[vectorname].begin(), darrs[vectorname].cend(), 0);
+    double sum = std::accumulate(darrs[vectorname].begin(), darrs[vectorname].end(), 0);
     return sum / darrs[vectorname].size();
 }
 
@@ -265,7 +266,7 @@ double cumsum(const std::string& vectorname) {
     if (darrs[vectorname].empty()) {
         throw std::invalid_argument("Vector is empty. Cannot calculate average.");
     }
-    return std::accumalate(darrs[vectorname].begin(), darrs[vectorname].cend(), 0);
+    return std::accumulate(darrs[vectorname].begin(), darrs[vectorname].end(), 0);
 }
 
 // Дисперсия
