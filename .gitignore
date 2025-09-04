@@ -1,0 +1,5 @@
+*.exe
+*.o
+*.out
+*.elf
+/build/*

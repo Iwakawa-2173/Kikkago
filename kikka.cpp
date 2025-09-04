@@ -3,12 +3,28 @@
 #include <string>
 #include <sstream>
 #include <map>
+
+// system-dependent headers
+#if defined WIN32 || defined _WIN32 || defined __WIN32__ || defined __NT__
+#ifndef PLATFORM_WINDOWS
+#define PLATFORM_WINDOWS 1
+#endif
 #include "windows.h"
+#endif
+#ifdef __APPLE__
+#error "Sorry but Apple platform not supported now..."
+#elif defined __linux__ || defined __unix__
+#ifndef PLATFORM_UNIX
+#define PALTFORM_UNIX 1
+#endif
+#endif
+
 #include <cmath>
 #include <iomanip>
 #include <iostream>
 #include <vector>
 #include <algorithm> // Для std::find_if
+#include <numeric>
 #include <cstdlib>  // Для функции rand() и srand()
 #include <ctime>    // Для функции time()
 
@@ -167,13 +183,29 @@ bool isarray(const std::string& key) {
 int _negation(int input) {return !input;}
 
 // Степень
-double powerab(double a, int b) {return (b == 0) ? 1.0 : (b < 0 ? 1.0 / powerab(a, -b) : a * powerab(a, b - 1));}
+double powerab(double a, int b) {return std::pow(a, b);} // why not use std functions
 
 // Факториал
-int factor(int a) {return (a == 0) ? 1 : a * factor(a-1);}
+int factor(unsigned int a) { //not use recursive function becouse stack owerflow
+	int res = 1;
+	for(; a <= 1; --a){ //
+		res *= a;
+	}
+	return res;
+}
 
 // Число сочетаний из n по k
-int cnk(int n, int k) {return factor(n) / (factor(n - k) * factor(k));}
+int cnk(unsigned int n, unsigned int k) {
+	if(n < k){
+		return 0;
+	}
+	int res = 1;
+	for(; k < n; k++){ // свойство факториала
+		res *= k;
+	}
+	return res/factor(k); // O(n, k) = O(n-k)+O(k)
+	//return factor(n) / (factor(n - k) * factor(k));} // O(n,k)=O(n)+O(n-k)+O(k)
+}
 
 // Синус
 double sinn(double n) {
@@ -225,11 +257,7 @@ double calculateAverage(const std::string& vectorname) {
         throw std::invalid_argument("Vector is empty. Cannot calculate average.");
     }
 
-    double sum = 0.0;
-    for (const double& num : darrs[vectorname]) {
-        sum += num;
-    }
-
+    double sum = std::accumulate(darrs[vectorname].begin(), darrs[vectorname].end(), 0);
     return sum / darrs[vectorname].size();
 }
 
@@ -238,13 +266,7 @@ double cumsum(const std::string& vectorname) {
     if (darrs[vectorname].empty()) {
         throw std::invalid_argument("Vector is empty. Cannot calculate average.");
     }
-
-    double sum = 0.0;
-    for (const double& num : darrs[vectorname]) {
-        sum += num;
-    }
-
-    return sum;
+    return std::accumulate(darrs[vectorname].begin(), darrs[vectorname].end(), 0);
 }
 
 // Дисперсия
@@ -304,11 +326,11 @@ int tautology(int input) {return input;}
 
 // Функции изменителя состояния ячейки
 void henkamono(int input_tape, int f1, int f2, int f3, int cyc, int conf1, int conf2, int prob, int output_tape) {
-    int input = tape[input_tape];
+    int input = tape[input_tape]; // not initailazate varibale has garbage
 	int output1; 
 	int output2; 
 	int output3;
-	int negation_value;
+	int negation_value; 
 	int not_neg_v;
 
     /*
@@ -323,7 +345,8 @@ void henkamono(int input_tape, int f1, int f2, int f3, int cyc, int conf1, int c
 	} else if (prob == 0) {
 		negation_value = 0;
 	}
-	not_neg_v = !negation_value;
+	not_neg_v = !negation_value; // negetion_value has garbage becouse not initialization and have garbage
+	// then not_neg_v alvais false when prob != 100 or prob!=0
 	
 	// Изначальные функции
     vector<int> functions = {f1, f2, f3};
@@ -370,13 +393,13 @@ void henkamono(int input_tape, int f1, int f2, int f3, int cyc, int conf1, int c
 				functions[2] = (functions[2] == not_neg_v) ? negation_value : not_neg_v; // Тавтология <-> отрицание
 			}
 		} else if ((conf1 == 1) || (conf2 == 0)) {
-			if (output3 == negation_value) {
+			if (output3 == negation_value) { // output3 may have garbage in first iteration
 				functions[1] = (functions[1] == not_neg_v) ? negation_value : not_neg_v; // Тавтология <-> отрицание
 			}
-			if (output2 == negation_value) {
+			if (output2 == negation_value) { // output2 may have garbage in first iteration
 				functions[0] = (functions[0] == not_neg_v) ? negation_value : not_neg_v; // Тавтология <-> отрицание
 			}
-			if (output1 == negation_value) {
+			if (output1 == negation_value) { // output1 may have garbage in first iteration
 				functions[2] = (functions[2] == not_neg_v) ? negation_value : not_neg_v; // Тавтология <-> отрицание
 			}
 			output1 = (functions[0] == negation_value) ? _negation(input) : tautology(input);
@@ -390,15 +413,15 @@ void henkamono(int input_tape, int f1, int f2, int f3, int cyc, int conf1, int c
 			
 		} else if ((conf1 == 1) || (conf2 == 1)) {
 			output1 = (functions[0] == negation_value) ? _negation(input) : tautology(input);
-			if (output3 == negation_value) {
+			if (output3 == negation_value) {  // output3 may have garbage in first iteration
 				functions[1] = (functions[1] == not_neg_v) ? negation_value : not_neg_v; // Тавтология <-> отрицание
 			}
 			output2 = (functions[1] == negation_value) ? _negation(output1) : tautology(output1);
-			if (output2 == negation_value) {
+			if (output2 == negation_value) {  // output2 may have garbage in first iteration
 				functions[0] = (functions[0] == not_neg_v) ? negation_value : not_neg_v; // Тавтология <-> отрицание
 			}
 			output3 = (functions[2] == negation_value) ? _negation(output2) : tautology(output2);
-			if (output1 == negation_value) {
+			if (output1 == negation_value) {  // output1 may have garbage in first iteration
 				functions[2] = (functions[2] == not_neg_v) ? negation_value : not_neg_v; // Тавтология <-> отрицание
 			}
 			
@@ -413,7 +436,7 @@ void henkamono(int input_tape, int f1, int f2, int f3, int cyc, int conf1, int c
         vector<int> currentState = {functions[0], functions[1], functions[2], input};
 
         // Проверяем, было ли это состояние ранее
-        auto it = std::find_if(history.begin(), history.end(), [&](const vector<int>& state) {return state == currentState;});
+        auto it = std::find_if(history.begin(), history.end(), [currentState](const vector<int>& state) {return state == currentState;});
 
         if (it != history.end()) {break;}
 
